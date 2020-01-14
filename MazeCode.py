@@ -7,10 +7,14 @@ pygame.init()
 display_width = 320
 display_height = 240
 
+#Size of the wall rect
+size_rect_x = display_width / 20
+size_rect_y = display_height / 15
+
 #Class for the player
 class Player(object):
     def __init__(self):
-        self.rect = pygame.Rect(32, 32, 16, 16)
+        self.rect = pygame.Rect(2*size_rect_x, 2*size_rect_y, size_rect_x, size_rect_y)
 
     def move(self, dx, dy):
         # Move each axis separately. Note that this checks for collisions both times.
@@ -41,7 +45,7 @@ class Player(object):
 class Wall(object):
     def __init__(self, pos):
         walls.append(self)
-        self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+        self.rect = pygame.Rect(pos[0], pos[1], size_rect_x, size_rect_y)
 
 
 font = pygame.font.SysFont(None, 50)
@@ -87,9 +91,9 @@ def reinit():
             if col == "W":
                 Wall((x, y))
             if col == "E":
-                end_rect = pygame.Rect(x, y, 16, 16)
-            x += 16
-        y += 16
+                end_rect = pygame.Rect(x, y, size_rect_x, size_rect_y)
+            x += size_rect_x
+        y += size_rect_y
         x = 0
 reinit()
 
@@ -112,7 +116,7 @@ def play_again():
     textscreen.blit(text, (SCREEN_WIDTH / 2 - text.get_width() / 2,
                        SCREEN_HEIGHT / 2 - text.get_height() / 2))
     #clock = pygame.time.Clock()
-    pygame.display.flip() # Update the full display Surface to the screen
+    pygame.display.flip() # Update the full display Surface to the screen.
     in_main_menu = True
     while in_main_menu:
         clock.tick(60)
@@ -142,13 +146,13 @@ while running:
     # Move the player if an arrow key is pressed
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
-        player.move(-2, 0)
+        player.move(-size_rect_x/8, 0)
     if key[pygame.K_RIGHT]:
-        player.move(2, 0)
+        player.move(size_rect_x/8, 0)
     if key[pygame.K_UP]:
-        player.move(0, -2)
+        player.move(0, -size_rect_y/8)
     if key[pygame.K_DOWN]:
-        player.move(0, 2)
+        player.move(0, size_rect_y/8)
     if player.rect.colliderect(end_rect):
         again = play_again()
         if again:
